@@ -1,0 +1,23 @@
+{
+  "name": "ddd-layer-architectural-testing",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "test",
+    "testing",
+    "architecture",
+    "ddd",
+    "domain",
+    "driven",
+    "design"
+  ],
+  "author": "Daniel Kück",
+  "license": "ISC",
+  "dependencies": {
+    "path": "^0.12.7"
+  }
+}
