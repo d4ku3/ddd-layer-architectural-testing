@@ -1,4 +1,11 @@
-import * as SharedTestingTools from '../shared/shared-testing-tools';
+import {
+  getContexts,
+  getLayersPathsOfApplication,
+  getPrefixAndContextAndAggregateAndLayerOfDirectory,
+  getFilesPerLayerByPath,
+  readFile,
+  getFileType
+} from './shared/shared-testing-tools.js';
 
 function checkDependenciesInFile(file, illegalContexts) {
   let hasIllegalDeps = false;
@@ -50,49 +57,45 @@ function checkFileForIllegalDependencies(
   }
 }
 
-function runTestForContext(contexts, context, layerPath) {
-  it('only access other contexts via api to interface', () => {
-    let hasIllegalDeps = false;
-    SharedTestingTools.getFilesPerLayerByPath(layerPath).forEach((fileName) => {
-      const fileType = SharedTestingTools.getFileType(fileName);
-      const fileAsString = SharedTestingTools.readFile(
-        layerPath + '/' + fileName,
-      );
-      if (
-        checkFileForIllegalDependencies(
-          contexts,
-          context,
-          fileAsString,
-          fileType,
-        )
-      ) {
-        hasIllegalDeps = true;
-        console.log(fileName + ' has illegal dependencies');
-      }
-    });
-    return expect(hasIllegalDeps).toBe(false);
-  });
-}
+export function crossContextCommunicationTests() {
+  console.log('Cross Context Communication: In DDD architecture');
+  const dirPaths = getLayersPathsOfApplication();
+  const contexts = getContexts(dirPaths);
 
-describe.skip('Cross Context Communication: In DDD architecture', () => {
-  const dirPaths = SharedTestingTools.getLayersPathsOfApplication();
-  const contexts = SharedTestingTools.getContexts(dirPaths);
-
-  SharedTestingTools.getLayersPathsOfApplication()
+  getLayersPathsOfApplication()
     .sort()
     .forEach((layerPath) => {
       const [prefix, context, aggregate, layer] =
-        SharedTestingTools.getPrefixAndContextAndAggregateAndLayerOfDirectory(
+        getPrefixAndContextAndAggregateAndLayerOfDirectory(
           layerPath,
         );
 
       if (prefix && context && aggregate && layer) {
-        describe(
-          'dependencies of context ' + context + ' in aggregate ' + aggregate,
-          () => {
-            runTestForContext(contexts, context, layerPath);
-          },
-        );
+        console.log('dependencies of context ' + context + ' in aggregate ' + aggregate);
+        runTestForContext(contexts, context, layerPath);
       }
     });
-});
+}
+
+function runTestForContext(contexts, context, layerPath) {
+  console.log('only access other contexts via api to interface')
+  let hasIllegalDeps = false;
+  getFilesPerLayerByPath(layerPath).forEach((fileName) => {
+    const fileType = getFileType(fileName);
+    const fileAsString = readFile(
+      layerPath + '/' + fileName,
+    );
+    if (
+      checkFileForIllegalDependencies(
+        contexts,
+        context,
+        fileAsString,
+        fileType,
+      )
+    ) {
+      hasIllegalDeps = true;
+      console.log(fileName + ' has illegal dependencies');
+    }
+  });
+  return hasIllegalDeps === false;
+}

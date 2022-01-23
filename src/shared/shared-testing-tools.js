@@ -11,9 +11,9 @@ function flatten(lists) {
 
 function getDirectories(srcPath) {
     return fs
-        .readdirSync(srcPath)
-        .map((file) => path.join(srcPath, file))
-        .filter((dirPath) => fs.statSync(dirPath).isDirectory());
+        ?.readdirSync(srcPath)
+        ?.map((file) => path.join(srcPath, file))
+        ?.filter((dirPath) => fs.statSync(dirPath).isDirectory());
 }
 
 function getDirectoriesRecursive(srcPath) {

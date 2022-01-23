@@ -1,4 +1,9 @@
-import * as SharedTestingTools from '../shared/shared-testing-tools';
+import {
+  getLayersPathsOfApplication,
+  getPrefixAndContextAndAggregateAndLayerOfDirectory,
+  getFilesPerLayerByPath,
+  readFile
+} from './shared/shared-testing-tools.js';
 
 function checkDependenciesInFile(file, illegalLayers) {
   let hasIllegalDeps = false;
@@ -29,34 +34,30 @@ function checkFileForIllegalDependencies(file, ownLayer) {
   }
 }
 
-function runTestForLayer(layer, layerPath) {
-  it('do not depend on upper layers in own aggregate', () => {
-    let hasIllegalDeps = false;
-    SharedTestingTools.getFilesPerLayerByPath(layerPath).forEach((file) => {
-      const fileAsString = SharedTestingTools.readFile(layerPath + '/' + file);
-      if (checkFileForIllegalDependencies(fileAsString, layer)) {
-        hasIllegalDeps = true;
-        console.log(file + ' has illegal dependencies');
-      }
-    });
-    return expect(hasIllegalDeps).toBe(false);
-  });
-}
-
-describe('Layers: In DDD architecture', () => {
-  SharedTestingTools.getLayersPathsOfApplication().forEach((layerPath) => {
+export function layeredDependenciesTest() {
+  console.log('Layers: In DDD architecture');
+  getLayersPathsOfApplication().forEach((layerPath) => {
     const [prefix, context, aggregate, layer] =
-      SharedTestingTools.getPrefixAndContextAndAggregateAndLayerOfDirectory(
+      getPrefixAndContextAndAggregateAndLayerOfDirectory(
         layerPath,
       );
 
     if (prefix && context && aggregate && layer) {
-      describe(
-        'dependencies in aggregate ' + aggregate + ' in layer ' + layer,
-        () => {
-          runTestForLayer(layer, layerPath);
-        },
-      );
+      console.log('dependencies in aggregate ' + aggregate + ' in layer ' + layer);
+      runTestForLayer(layer, layerPath);
     }
   });
-});
+}
+
+function runTestForLayer(layer, layerPath) {
+  console.log('do not depend on upper layers in own aggregate')
+  let hasIllegalDeps = false;
+  getFilesPerLayerByPath(layerPath).forEach((file) => {
+    const fileAsString = readFile(layerPath + '/' + file);
+    if (checkFileForIllegalDependencies(fileAsString, layer)) {
+      hasIllegalDeps = true;
+      console.log(file + ' has illegal dependencies');
+    }
+  });
+  return hasIllegalDeps === false;
+}
