@@ -1,6 +1,6 @@
 import {
   getLayersPathsOfApplication,
-  getPrefixAndContextAndAggregateAndLayerOfDirectory,
+  getPrefixContextAggregateLayerOfDirectory,
   getFilesPerLayerByPath,
   readFile
 } from './shared/shared-testing-tools.js';
@@ -38,7 +38,7 @@ export function layeredDependenciesTest() {
   console.log('Layers: In DDD architecture');
   getLayersPathsOfApplication().forEach((layerPath) => {
     const [prefix, context, aggregate, layer] =
-      getPrefixAndContextAndAggregateAndLayerOfDirectory(
+      getPrefixContextAggregateLayerOfDirectory(
         layerPath,
       );
 

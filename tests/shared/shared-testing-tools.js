@@ -2,8 +2,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 const matchDDDLayerNames = new RegExp('interface$|domain$|application$', 'gim');
-
 const matchTypescriptFileEnding = new RegExp('.ts$', 'gim');
+const contextRegex = /\/((.*)-context)\/.*\/.*$/;
 
 function flatten(lists) {
     return lists.reduce((a, b) => a.concat(b), []);
@@ -11,9 +11,9 @@ function flatten(lists) {
 
 function getDirectories(srcPath) {
     return fs
-        ?.readdirSync(srcPath)
-        ?.map((file) => path.join(srcPath, file))
-        ?.filter((dirPath) => fs.statSync(dirPath).isDirectory());
+        .readdirSync(srcPath)
+        .map((file) => path.join(srcPath, file))
+        .filter((dirPath) => fs.statSync(dirPath).isDirectory());
 }
 
 function getDirectoriesRecursive(srcPath) {
@@ -27,8 +27,7 @@ export const getContexts = (dirPaths) => {
     const contexts = [];
 
     dirPaths.forEach((dirPath) => {
-        const re = /\/(context-(.*))\/.*\/.*$/;
-        const context = dirPath.split(re)[1];
+        const context = dirPath.split(contextRegex)[1];
 
         if (context && !contexts.includes(context)) {
             contexts.push(context);
@@ -39,15 +38,14 @@ export const getContexts = (dirPaths) => {
 };
 
 export const getLayersPathsOfApplication = () => {
-    const dirs = getDirectoriesRecursive('src');
+    const dirs = getDirectoriesRecursive('/Volumes/ExternalVol/External-Development/npm-packages/test-nest-prject/src');
     return dirs.filter((dir) => dir.match(matchDDDLayerNames));
 };
 
-export const getPrefixAndContextAndAggregateAndLayerOfDirectory = (
+export const getPrefixContextAggregateLayerOfDirectory = (
     dirPath,
 ) => {
-    const re = /\/context-(.*)\/(.*)\/(.*)$/;
-    return dirPath.split(re);
+    return dirPath.split(contextRegex);
 };
 
 export const getFilesPerLayerByPath = (layerPath) => {

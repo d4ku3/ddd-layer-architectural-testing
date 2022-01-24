@@ -1,6 +1,6 @@
 import {
   getLayersPathsOfApplication,
-  getPrefixAndContextAndAggregateAndLayerOfDirectory,
+  getPrefixContextAggregateLayerOfDirectory,
   getFilesPerLayerByPath,
   getFileType
 } from './shared/shared-testing-tools.js';
@@ -28,7 +28,7 @@ export function layeredFileTypeTest() {
   console.log('Structure: In DDD architecture');
   getLayersPathsOfApplication().forEach((layerPath) => {
     const [prefix, context, aggregate, layer] =
-      getPrefixAndContextAndAggregateAndLayerOfDirectory(
+      getPrefixContextAggregateLayerOfDirectory(
         layerPath,
       );
 

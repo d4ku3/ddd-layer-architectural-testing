@@ -1,7 +1,7 @@
 import {
   getContexts,
   getLayersPathsOfApplication,
-  getPrefixAndContextAndAggregateAndLayerOfDirectory,
+  getPrefixContextAggregateLayerOfDirectory,
   getFilesPerLayerByPath,
   readFile,
   getFileType
@@ -60,15 +60,18 @@ function checkFileForIllegalDependencies(
 export function crossContextCommunicationTests() {
   console.log('Cross Context Communication: In DDD architecture');
   const dirPaths = getLayersPathsOfApplication();
+  if (dirPaths.length === 0) throw "No paths found"
   const contexts = getContexts(dirPaths);
+  if (dirPaths.length === 0) throw "No contexts found"
 
-  getLayersPathsOfApplication()
+  dirPaths
     .sort()
     .forEach((layerPath) => {
       const [prefix, context, aggregate, layer] =
-        getPrefixAndContextAndAggregateAndLayerOfDirectory(
+        getPrefixContextAggregateLayerOfDirectory(
           layerPath,
         );
+      console.log('Test Step:  ' + prefix + '  <==>  ' + context + '  <==>  ' + aggregate + '  <==>  ' + layer);
 
       if (prefix && context && aggregate && layer) {
         console.log('dependencies of context ' + context + ' in aggregate ' + aggregate);
