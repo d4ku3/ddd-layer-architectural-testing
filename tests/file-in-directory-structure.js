@@ -3,7 +3,7 @@ import {
   getPrefixContextAggregateLayerOfDirectory,
   getFilesPerLayerByPath,
   getFileType
-} from './shared/shared-testing-tools.js';
+} from './utils.js';
 
 function checkIfFileTypeIsInCorrectLayer(fileType, layer) {
   switch (fileType) {

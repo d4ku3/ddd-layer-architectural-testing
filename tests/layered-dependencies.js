@@ -3,7 +3,7 @@ import {
   getPrefixContextAggregateLayerOfDirectory,
   getFilesPerLayerByPath,
   readFile
-} from './shared/shared-testing-tools.js';
+} from './utils.js';
 
 function checkDependenciesInFile(file, illegalLayers) {
   let hasIllegalDeps = false;

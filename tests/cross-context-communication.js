@@ -5,7 +5,7 @@ import {
   getFilesPerLayerByPath,
   readFile,
   getFileType
-} from './shared/shared-testing-tools.js';
+} from './utils.js';
 
 function checkDependenciesInFile(file, illegalContexts) {
   let hasIllegalDeps = false;
@@ -16,7 +16,6 @@ function checkDependenciesInFile(file, illegalContexts) {
       'gim',
     );
     const layer = file.split(matchLayerOfImportStatement)[1];
-    console.log(layer);
     if (layer !== 'interface') {
       hasIllegalDeps = true;
     }
@@ -60,9 +59,7 @@ function checkFileForIllegalDependencies(
 export function crossContextCommunicationTests() {
   console.log('Cross Context Communication: In DDD architecture');
   const dirPaths = getLayersPathsOfApplication();
-  if (dirPaths.length === 0) throw "No paths found"
   const contexts = getContexts(dirPaths);
-  if (dirPaths.length === 0) throw "No contexts found"
 
   dirPaths
     .sort()
@@ -71,7 +68,6 @@ export function crossContextCommunicationTests() {
         getPrefixContextAggregateLayerOfDirectory(
           layerPath,
         );
-      console.log('Test Step:  ' + prefix + '  <==>  ' + context + '  <==>  ' + aggregate + '  <==>  ' + layer);
 
       if (prefix && context && aggregate && layer) {
         console.log('dependencies of context ' + context + ' in aggregate ' + aggregate);
