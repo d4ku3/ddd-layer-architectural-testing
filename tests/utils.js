@@ -2,8 +2,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 const matchDDDLayerNames = new RegExp('interface$|domain$|application$', 'gim');
-const matchTypescriptFileEnding = new RegExp('.ts$', 'gim');
-const matchFileType = new RegExp('[a-zA-Z-]*.([a-zA-Z-]*).', 'g');
+const matchTypescriptFileEnding = new RegExp('.(ts|js)$', 'gim');
+const matchFileType = new RegExp('[a-zA-Z-]*\.([a-zA-Z-]*)\.(ts|js)$', 'g');
 const contextRegex = /.*\/(.*-context)\/(.*)\/(.*)$/;
 
 function getDirectories(srcPath) {
@@ -26,8 +26,6 @@ export const getContexts = (dirPaths) => {
     }
   });
 
-  console.log('Found Contexts:')
-  console.log(contexts)
   if (dirPaths.length === 0) throw "No contexts found"
 
   return contexts;
@@ -38,8 +36,6 @@ export const getLayersPathsOfApplication = () => {
 
   const filteredDirs = dirs.filter((dir) => dir.match(matchDDDLayerNames));
 
-  console.log('Searched Pathes:')
-  console.log(filteredDirs)
   if (filteredDirs.length === 0) throw "No paths found"
 
   return filteredDirs;

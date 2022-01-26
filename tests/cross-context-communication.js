@@ -47,7 +47,6 @@ function checkFileForIllegalDependencies(
   fileAsString,
   fileType,
 ) {
-  console.log(fileType);
   switch (fileType) {
     case 'api':
       return checkDependenciesInFile(fileAsString, contexts);
@@ -64,23 +63,25 @@ export function crossContextCommunicationTests() {
   dirPaths
     .sort()
     .forEach((layerPath) => {
-      const [prefix, context, aggregate, layer] =
+      const [_prefix, context, aggregate, layer] =
         getPrefixContextAggregateLayerOfDirectory(
           layerPath,
         );
 
-      if (prefix && context && aggregate && layer) {
-        console.log('dependencies of context ' + context + ' in aggregate ' + aggregate);
+      if (context && aggregate && layer) {
+        console.log('\tdependencies of context ' + context + ' in aggregate ' + aggregate);
         runTestForContext(contexts, context, layerPath);
       }
     });
 }
 
 function runTestForContext(contexts, context, layerPath) {
-  console.log('only access other contexts via api to interface')
+  console.log('\t\tonly access other contexts via api to interface')
   let hasIllegalDeps = false;
   getFilesPerLayerByPath(layerPath).forEach((fileName) => {
+    console.log(fileName)
     const fileType = getFileType(fileName);
+    console.log(fileType)
     const fileAsString = readFile(
       layerPath + '/' + fileName,
     );
