@@ -1,7 +1,7 @@
 import {
   getLayersPathsOfApplication,
-  getPrefixContextAggregateLayerOfDirectory,
-  getFilesPerLayerByPath,
+  splitDirectoryPathInPrefixContextAggregateLayer,
+  getFilesInLayer,
   readFile
 } from './utils.js';
 
@@ -38,7 +38,7 @@ export function layeredDependenciesTest() {
   console.log('Layers: In DDD architecture');
   getLayersPathsOfApplication().forEach((layerPath) => {
     const [prefix, context, aggregate, layer] =
-      getPrefixContextAggregateLayerOfDirectory(
+      splitDirectoryPathInPrefixContextAggregateLayer(
         layerPath,
       );
 
@@ -52,7 +52,7 @@ export function layeredDependenciesTest() {
 function runTestForLayer(layer, layerPath) {
   console.log('do not depend on upper layers in own aggregate')
   let hasIllegalDeps = false;
-  getFilesPerLayerByPath(layerPath).forEach((file) => {
+  getFilesInLayer(layerPath).forEach((file) => {
     const fileAsString = readFile(layerPath + '/' + file);
     if (checkFileForIllegalDependencies(fileAsString, layer)) {
       hasIllegalDeps = true;

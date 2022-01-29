@@ -16,7 +16,7 @@ function getDirectories(srcPath) {
       && !path.includes('.git'));
 }
 
-export const getContexts = (dirPaths) => {
+export const getAllContextsOfProject = (dirPaths) => {
   const contexts = [];
 
   dirPaths.forEach((dirPath) => {
@@ -26,13 +26,26 @@ export const getContexts = (dirPaths) => {
     }
   });
 
-  if (dirPaths.length === 0) throw "No contexts found"
-
+  if (contexts.length === 0) throw "No contexts found"
   return contexts;
 };
 
+export const getAllAggregatesOfProject = (dirPaths) => {
+  const aggregates = [];
+
+  dirPaths.forEach((dirPath) => {
+    const aggregate = dirPath.split(contextRegex)[2];
+    if (aggregate && !aggregates.includes(aggregate)) {
+      aggregates.push(aggregate);
+    }
+  });
+
+  if (aggregates.length === 0) throw "No aggregates found"
+  return aggregates;
+};
+
 export const getLayersPathsOfApplication = () => {
-  const dirs = getDirectoriesRecursive(path.join('..', 'test-nest-prject', 'src'));
+  const dirs = getDirectoriesRecursive(path.join('..', 'example-ddd-nest-project', 'src'));
 
   const filteredDirs = dirs.filter((dir) => dir.match(matchDDDLayerNames));
 
@@ -41,8 +54,8 @@ export const getLayersPathsOfApplication = () => {
   return filteredDirs;
 };
 
-export const getFilesPerLayerByPath = (layerPath) => {
-  const files = fs.readdirSync(layerPath);
+export const getFilesInLayer = (layer) => {
+  const files = fs.readdirSync(layer);
   return files.filter((file) => file.match(matchTypescriptFileEnding));
 };
 
@@ -50,8 +63,10 @@ const flatten = lists => lists.reduce((a, b) => a.concat(b), []);
 
 const getDirectoriesRecursive = srcPath => [srcPath, ...flatten(getDirectories(srcPath).map(getDirectoriesRecursive))];
 
-export const getPrefixContextAggregateLayerOfDirectory = dirPath => dirPath.split(contextRegex);
+export const splitDirectoryPathInPrefixContextAggregateLayer = dirPath => dirPath.split(contextRegex);
 
 export const readFile = file => fs.readFileSync(file, 'utf8');
 
 export const getFileType = fileName => fileName.split(matchFileType)[1];
+
+export const removeElementFromArray = (array, element) => array.splice(array.indexOf(element), 1);

@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 
-import {crossContextCommunicationTests} from './tests/cross-context-communication.js'
-import {layeredFileTypeTest} from './tests/file-in-directory-structure.js'
-import {layeredDependenciesTest} from './tests/layered-dependencies.js'
+import {innerContextCommunicationTests} from './tests/inner-context-communication.js'
+import {layeredFileTypeTest} from './tests/file-allocation.js'
+import {layeredDependenciesTest} from './tests/layer-dependencies.js'
+import {innerAggregateCommunicationTests} from "./tests/inner-aggregate-communication.js";
 
-crossContextCommunicationTests();
+innerContextCommunicationTests();
+innerAggregateCommunicationTests();
 layeredFileTypeTest();
 layeredDependenciesTest();

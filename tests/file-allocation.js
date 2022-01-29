@@ -1,7 +1,7 @@
 import {
   getLayersPathsOfApplication,
-  getPrefixContextAggregateLayerOfDirectory,
-  getFilesPerLayerByPath,
+  splitDirectoryPathInPrefixContextAggregateLayer,
+  getFilesInLayer,
   getFileType
 } from './utils.js';
 
@@ -28,13 +28,13 @@ export function layeredFileTypeTest() {
   console.log('Structure: In DDD architecture');
   getLayersPathsOfApplication().forEach((layerPath) => {
     const [prefix, context, aggregate, layer] =
-      getPrefixContextAggregateLayerOfDirectory(
+      splitDirectoryPathInPrefixContextAggregateLayer(
         layerPath,
       );
 
     if (prefix && context && aggregate && layer) {
       console.log('in aggregate ' + aggregate + ' the file')
-      const fileNames = getFilesPerLayerByPath(layerPath);
+      const fileNames = getFilesInLayer(layerPath);
       if (fileNames) {
         fileNames.forEach((fileName) => {
           runTestForFile(
