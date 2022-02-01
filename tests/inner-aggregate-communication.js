@@ -4,7 +4,7 @@ import {
   getFilesInLayer,
   readFile,
   getFileType,
-  removeElementFromArray, getAllAggregatesOfProject
+  removeElementFromArray, getAllAggregatesOfProject, successLog, errorLog
 } from './utils.js';
 
 export function innerAggregateCommunicationTests() {
@@ -26,7 +26,7 @@ export function innerAggregateCommunicationTests() {
       }
     });
 
-  console.log('\t\tand no illegal cross aggregate communication found here');
+  successLog('\t\tand no illegal cross aggregate communication found here');
 }
 
 function runTestForLayer(aggregatesOfProject, aggregateOfLayer, dirPath) {
@@ -45,7 +45,7 @@ function runTestForLayer(aggregatesOfProject, aggregateOfLayer, dirPath) {
           'gim',
         );
         if (matchIllegalImportStatement.test(fileAsString)) {
-          console.log('\t\tbut an illegal dependency is found')
+          errorLog('\t\tbut an illegal dependency is found')
           throw '\t\t\t' + fileName + ' in ' + aggregateOfLayer + ' has dependencies to another aggregate';
         }
       });

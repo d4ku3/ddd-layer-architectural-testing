@@ -5,12 +5,13 @@ import {
   getFilesInLayer,
   readFile,
   getFileType,
-  removeElementFromArray
+  removeElementFromArray,
+  successLog, errorLog
 } from './utils.js';
 
 export function innerContextCommunicationTests() {
-  console.log('Inner Context Communication:');
-  console.log('\tonly apis are allowed to communicate to other contexts');
+  console.log('Inner Context Communication:')
+  console.log('\tonly apis are allowed to communicate to other contexts')
   const dirPaths = getLayersPathsOfApplication();
   const contextsOfProject = getAllContextsOfProject(dirPaths);
 
@@ -26,8 +27,7 @@ export function innerContextCommunicationTests() {
         runTestForLayer(contextsOfProject, context, dirPath)
       }
     });
-
-  console.log('\t\tand no illegal cross context communication found here');
+  successLog('\t\tand no illegal cross context communication found here')
 }
 
 function runTestForLayer(contextsOfProject, contextOfLayer, dirPath) {
@@ -46,7 +46,7 @@ function runTestForLayer(contextsOfProject, contextOfLayer, dirPath) {
           'gim',
         );
         if (matchIllegalImportStatement.test(fileAsString)) {
-          console.log('\t\tbut an illegal dependency is found')
+          errorLog('\t\tbut an illegal dependency is found')
           throw '\t\t\t' + fileName + ' in ' + contextOfLayer + ' has dependencies to another context';
         }
       });

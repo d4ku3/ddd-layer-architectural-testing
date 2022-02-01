@@ -19,14 +19,13 @@
   "author": "Daniel Kück",
   "license": "ISC",
   "dependencies": {
-    "path": "^0.12.7"
+    "optimist": "^0.6.1",
+    "path": "^0.12.7",
+    "process": "^0.11.10"
   },
   "devDependencies": {
     "@babel/cli": "^7.16.8",
     "@babel/core": "^7.16.12",
     "@babel/preset-env": "^7.16.11"
-  },
-  "bin": {
-    "arch-test": "index.js"
   }
 }

@@ -1,5 +1,9 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import {argv} from 'process';
+
+const projectName = argv[2];
+const sourceFolder = argv[3];
 
 const matchDDDLayerNames = new RegExp('interface$|domain$|application$', 'gim');
 const matchTypescriptFileEnding = new RegExp('.(ts|js)$', 'gim');
@@ -7,13 +11,17 @@ const matchFileType = new RegExp('[a-zA-Z-]*\.([a-zA-Z-]*)\.(ts|js)$', 'g');
 const contextRegex = /.*\/(.*-context)\/(.*)\/(.*)$/;
 
 function getDirectories(srcPath) {
-  return fs
+  const dirs = fs
     .readdirSync(srcPath)
     .map((file) => path.join(srcPath, file))
     .filter(path => fs.statSync(path).isDirectory()
       && !path.includes('ddd-layer-architectural-testing')
       && !path.includes('node_modules')
       && !path.includes('.git'));
+
+  if (dirs.length <= 0) throw 'No directories found'
+
+  return dirs
 }
 
 export const getAllContextsOfProject = (dirPaths) => {
@@ -45,7 +53,7 @@ export const getAllAggregatesOfProject = (dirPaths) => {
 };
 
 export const getLayersPathsOfApplication = () => {
-  const dirs = getDirectoriesRecursive(path.join('..', 'example-ddd-nest-project', 'src'));
+  const dirs = getDirectoriesRecursive(path.join('..', projectName, sourceFolder));
 
   const filteredDirs = dirs.filter((dir) => dir.match(matchDDDLayerNames));
 
@@ -70,3 +78,7 @@ export const readFile = file => fs.readFileSync(file, 'utf8');
 export const getFileType = fileName => fileName.split(matchFileType)[1];
 
 export const removeElementFromArray = (array, element) => array.splice(array.indexOf(element), 1);
+
+export const successLog = log => console.log('\x1b[32m', log, '\x1b[0m')
+
+export const errorLog = log => console.log('\x1b[31m', log)
